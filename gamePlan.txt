@@ -1,0 +1,25 @@
+##1##
+use https://liftoff.github.io/pyminifier/analyze.html
+-> analyze python code
+-> provide initial documentation of code as a whole
+-> like what things it imports
+-> gets function names and parameters
+
+##2##
+analyze method contents
+-> determine relations between methods (what calls what)
+-> fake Software Word Usage Model to analyze name of method like actionObject(params)
+-> pagerank to get most important metods (?)
+-> shove everything into an object or list
+	-> name of function, params, what methods it calls, products of loops, what it returns, etc.
+
+##3##
+natural language processing
+-> create sentences from stuff inside object
+-> shove sentences into a list or something
+-> must be grammatically correct
+
+##last##
+readable output
+-> generate either a txt file or pdf w/ info
+-> or implement into django and generate a webpage
