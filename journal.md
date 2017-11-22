@@ -21,3 +21,13 @@ Moved everything into Github
 Developed a game plan of how to proceed  
 Found tool to analyze Python methods  
 Read more research into automatic documentation  
+
+# 11/20/17
+Downloaded pyminifier
+->python3 -m pip install https://pypi.python.org/packages/source/p/pyminifier/pyminifier-2.1.tar.gz
+->reference: https://liftoff.github.io/pyminifier/pyminifier.html
+
+# 11/21/17
+Investigated Tokenizer to analyze python source code
+->http://effbot.org/librarybook/tokenize.htm
+->helpful: https://github.com/liftoff/pyminifier/blob/master/pyminifier/__init__.py
