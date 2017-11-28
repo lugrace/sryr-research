@@ -31,3 +31,6 @@ Downloaded pyminifier
 Investigated Tokenizer to analyze python source code
 ->http://effbot.org/librarybook/tokenize.htm
 ->helpful: https://github.com/liftoff/pyminifier/blob/master/pyminifier/__init__.py
+
+#11/28/17
+Updated my slides
