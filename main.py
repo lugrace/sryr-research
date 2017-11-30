@@ -61,5 +61,5 @@ def p(arr):
 		print(next)
 
 source = open("foo.py").read()
-tokens = analyze(source)
-p(tokens)
+analysis = analyze(source)
+p(analysis)

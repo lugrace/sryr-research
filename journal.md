@@ -36,4 +36,4 @@ Investigated Tokenizer to analyze python source code
 Updated my slides
 
 #11/30/17
-Code to tokenize
+Code to tokenize, pull out imports, analyze 'name' lines in code
