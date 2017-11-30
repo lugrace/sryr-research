@@ -12,11 +12,10 @@ reserved_words = keyword.kwlist + builtins
 def listified_tokenizer(source):
     """Tokenizes *source* and returns the tokens as a list of lists."""
     io_obj = io.StringIO(source)
-    # return [list(a) for a in tokenize.generate_tokens(io_obj.readline)]
     tokens = []
     for a in tokenize.generate_tokens(io_obj.readline):
         tokens.append(list(a))
-    return enumerate_imports(tokens)#pullTypes(tokens)
+    return tokens
 
 def enumerate_imports(tokens):
     """
@@ -49,14 +48,18 @@ def pullTypes(tokens):
     names = []
     for next in tokens:
         if next[0] == 1:
-            if next[4] not in names:
-                names.append(next[4])
+            if next[4].replace('\n', '') not in names and "import" not in next[4]: #don't get import statements
+                names.append(next[4].replace('\n', ''))
     return names
+
+def analyze(source): #calls pullTypes and enumerate_imports
+    tokens = listified_tokenizer(source)
+    return tokens
 
 def p(arr):
 	for next in arr:
 		print(next)
 
 source = open("foo.py").read()
-tokens = listified_tokenizer(source)
+tokens = analyze(source)
 p(tokens)
