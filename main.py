@@ -1,4 +1,5 @@
 import os, sys, re, tokenize, keyword, io
+from method import Method
 
 builtins = [
     'ArithmeticError','AssertionError','AttributeError','BaseException','BufferError','BytesWarning','DeprecationWarning','EOFError','Ellipsis','EnvironmentError','Exception','False','FloatingPointError','FutureWarning','GeneratorExit','IOError','ImportError','ImportWarning','IndentationError','IndexError','KeyError','KeyboardInterrupt','LookupError','MemoryError','NameError','None','NotImplemented','NotImplementedError','OSError','OverflowError','PendingDeprecationWarning','ReferenceError','RuntimeError','RuntimeWarning',
@@ -62,4 +63,6 @@ def p(arr):
 
 source = open("foo.py").read()
 analysis = analyze(source)
-p(analysis)
+# p(analysis)
+user = Method("idk")
+print(user.return3())
