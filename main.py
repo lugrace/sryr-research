@@ -55,6 +55,7 @@ def pullTypes(tokens):
 
 def analyze(source): #calls pullTypes and enumerate_imports
     tokens = listified_tokenizer(source)
+    #make methods for each unique names from pullTypes
     return tokens
 
 def p(arr):

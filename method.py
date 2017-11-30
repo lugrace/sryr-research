@@ -1,6 +1,8 @@
 class Method:
 	"""docstring for Method"""
-	def __init__(self, arg):
+	names = [] #store as (name, [args], [lines inside])
+
+	def __init__(self, arg): #arg should be the method contents
 		super(Method, self).__init__()
 		self.arg = arg
 
