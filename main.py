@@ -53,17 +53,56 @@ def pullTypes(tokens):
                 names.append(next[4].replace('\n', ''))
     return names
 
+def findArgs(name):
+    firstP = name.find("(")
+    lastP = name.find(")")
+    argsStr = name.substr(firstP, lastP)
+
+    return [x.strip() for x in argsStr.split(',')]
+
+def makeMethods(analysis):
+    objs = []
+    numMethods = 0
+    posMethods = []
+    for j in range(0,len(analysis)): #start with something that starts w def, ends when run into other def
+        if "def" in analysis[j]:
+            numMethods = numMethods + 1
+            posMethods.append(j)
+
+    for i in range(0, numMethods):
+        innerMethod = [] #strings of things in method
+        tempName = ""
+        tempArgs = []
+        for a in range(posMethods[i], posMethods[i+1]-1):
+            if a == posMethods[i]:
+                tempName = analysis[a]
+                tempArgs = findArgs(tempName)
+            else:
+                innerMethod.append(analysis[a])
+
+        objs.append(Method(tempName, tempArgs, innerMethod))
+
+
 def analyze(source): #calls pullTypes and enumerate_imports
     tokens = listified_tokenizer(source)
     #make methods for each unique names from pullTypes
+    parsedAnalysis1 = pullTypes(tokens)
+    # makeMethods = makeMethods(parsedAnalysis1) #list of objects?
+
     return tokens
 
 def p(arr):
 	for next in arr:
 		print(next)
 
-source = open("foo.py").read()
+source = open("foo2.py").read()
 analysis = analyze(source)
-# p(analysis)
-user = Method("idk")
-print(user.return3())
+# parsedAnalysis = parseAnalysis(analysis)
+p(analysis)
+# print(pullTypes(analysis))
+user = Method("idk", "wtf", "test")
+print(user.toString())
+# # print(user.return3())
+# # print(user.getDocs(user.setDocs("test")))
+# user.setDocs('test')
+# print(user.getDocs())
