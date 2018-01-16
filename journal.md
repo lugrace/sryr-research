@@ -39,4 +39,7 @@ Updated my slides
 Code to tokenize, pull out imports, analyze 'name' lines in code
 
 #1/16/17
+Fixed code to pull in right arguements for methods
+
+#To do
 Conduct analysis by looking at relationships
