@@ -37,3 +37,6 @@ Updated my slides
 
 #11/30/17
 Code to tokenize, pull out imports, analyze 'name' lines in code
+
+#1/16/17
+Conduct analysis by looking at relationships

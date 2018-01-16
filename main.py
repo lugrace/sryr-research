@@ -56,7 +56,7 @@ def pullTypes(tokens):
 def findArgs(name):
     firstP = name.find("(")
     lastP = name.find(")")
-    argsStr = name.substr(firstP, lastP)
+    argsStr = name[firstP+1:lastP]
 
     return [x.strip() for x in argsStr.split(',')]
 
@@ -75,12 +75,14 @@ def makeMethods(analysis):
         tempArgs = []
         for a in range(posMethods[i], posMethods[i+1]-1):
             if a == posMethods[i]:
-                tempName = analysis[a]
+                tempName = analysis[a][4]
+                print("Temp Name", tempName)
                 tempArgs = findArgs(tempName)
             else:
                 innerMethod.append(analysis[a])
 
         objs.append(Method(tempName, tempArgs, innerMethod))
+    return objs
 
 
 def analyze(source): #calls pullTypes and enumerate_imports
@@ -99,6 +101,7 @@ source = open("foo2.py").read()
 analysis = analyze(source)
 # parsedAnalysis = parseAnalysis(analysis)
 p(analysis)
+print(makeMethods(analysis))
 # print(pullTypes(analysis))
 user = Method("idk", "wtf", "test")
 print(user.toString())

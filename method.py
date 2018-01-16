@@ -44,5 +44,5 @@ class Method:
 		self.docs = newdocs
 
 	def toString(self):
-		print("My name is ", name, " and I take ", args, " and here is my code ", lines, " and documentation: ", docs)
+		print("My name is ", self.name, " and I take ", self.args, " and here is my code ", self.lines, " and documentation: ", self.docs)
 		
