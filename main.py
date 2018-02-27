@@ -80,15 +80,27 @@ def makeMethods(analysis):
         for a in range(posMethods[i], end):
             if a == posMethods[i]:
                 tempName = analysis[a][4]
-                print("Temp Name", tempName)
                 tempArgs = findArgs(tempName)
             else:
                 if("def" not in analysis[a][4]):
                     innerMethod.append(analysis[a])
-
-        objs.append(Method(tempName, tempArgs, innerMethod).toString())
+        organizedInnerMethod = organizeInnerMethod(innerMethod)
+        objs.append(Method(tempName, tempArgs, organizedInnerMethod))
     return objs
 
+def organizeInnerMethod(inner):
+    list_of_insides = [] #list of lists of insides
+    tempLine = inner[0][4]
+    tks = []
+    for next in inner:
+        if next[4] == tempLine:
+            tks.append(next[1])
+        else:
+            list_of_insides.append((tempLine, tks))
+            tks = []
+            tempLine = next[4]
+    print(list_of_insides)
+    return list_of_insides
 
 def analyze(source): #calls pullTypes and enumerate_imports
     tokens = listified_tokenizer(source)

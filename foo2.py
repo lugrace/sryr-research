@@ -8,4 +8,6 @@ def return3():
 	return 3
 
 def returnX(x):
-	return x
+	if(x == 3):
+		return x
+	return 5
