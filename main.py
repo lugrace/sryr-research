@@ -69,23 +69,24 @@ def makeMethods(analysis):
         if "def" in analysis[j]:
             numMethods = numMethods + 1
             posMethods.append(j)
-    print("Num Methods: ", numMethods)
-    print("Pos Methods: ", posMethods)
     for i in range(0, numMethods):
         innerMethod = [] #strings of things in method
         tempName = ""
         tempArgs = []
-        start = posMethods[i]
-        while("def" in analysis[start][4]):
-            if start == posMethods[i]:
-                tempName = analysis[start][4]
+        if(i == numMethods - 1):
+            end = len(analysis)
+        else:
+            end = posMethods[i+1]-1
+        for a in range(posMethods[i], end):
+            if a == posMethods[i]:
+                tempName = analysis[a][4]
                 print("Temp Name", tempName)
                 tempArgs = findArgs(tempName)
             else:
-                innerMethod.append(analysis[start])
-            start = start + 1;
+                if("def" not in analysis[a][4]):
+                    innerMethod.append(analysis[a])
 
-        objs.append(Method(tempName, tempArgs, innerMethod))
+        objs.append(Method(tempName, tempArgs, innerMethod).toString())
     return objs
 
 
