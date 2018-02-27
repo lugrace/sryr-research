@@ -106,12 +106,23 @@ def analyze(source):
     tokens = listified_tokenizer(source)
     return tokens
 
+def writeImports(analysis):
+    doc = "I import the "
+    imports = enumerate_imports(analysis)
+    for next in imports:
+        doc = doc + next + " and "
+    doc = doc[0:len(doc)-5]
+    doc = doc + " packages."
+    return doc
+
 def p(arr):
 	for next in arr:
 		print(next)
 
+misc_documentation = []
 source = open("foo2.py").read()
 analysis = analyze(source)
 p(analysis)
+misc_documentation.append(writeImports(analysis))
 print(makeMethods(analysis))
 
