@@ -102,12 +102,8 @@ def organizeInnerMethod(inner):
     print(list_of_insides)
     return list_of_insides
 
-def analyze(source): #calls pullTypes and enumerate_imports
+def analyze(source): 
     tokens = listified_tokenizer(source)
-    #make methods for each unique names from pullTypes
-    parsedAnalysis1 = pullTypes(tokens)
-    # makeMethods = makeMethods(parsedAnalysis1) #list of objects?
-
     return tokens
 
 def p(arr):
@@ -116,13 +112,6 @@ def p(arr):
 
 source = open("foo2.py").read()
 analysis = analyze(source)
-# parsedAnalysis = parseAnalysis(analysis)
 p(analysis)
 print(makeMethods(analysis))
-# print(pullTypes(analysis))
-# user = Method("idk", "wtf", "test")
-# print(user.toString())
-# # print(user.return3())
-# # print(user.getDocs(user.setDocs("test")))
-# user.setDocs('test')
-# print(user.getDocs())
+
