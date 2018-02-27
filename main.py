@@ -57,6 +57,7 @@ def findArgs(name):
     firstP = name.find("(")
     lastP = name.find(")")
     argsStr = name[firstP+1:lastP]
+    # print("FIND ARGS", [x.strip() for x in argsStr.split(',')])
 
     return [x.strip() for x in argsStr.split(',')]
 
@@ -68,18 +69,21 @@ def makeMethods(analysis):
         if "def" in analysis[j]:
             numMethods = numMethods + 1
             posMethods.append(j)
-
+    print("Num Methods: ", numMethods)
+    print("Pos Methods: ", posMethods)
     for i in range(0, numMethods):
         innerMethod = [] #strings of things in method
         tempName = ""
         tempArgs = []
-        for a in range(posMethods[i], posMethods[i+1]-1):
-            if a == posMethods[i]:
-                tempName = analysis[a][4]
+        start = posMethods[i]
+        while("def" in analysis[start][4]):
+            if start == posMethods[i]:
+                tempName = analysis[start][4]
                 print("Temp Name", tempName)
                 tempArgs = findArgs(tempName)
             else:
-                innerMethod.append(analysis[a])
+                innerMethod.append(analysis[start])
+            start = start + 1;
 
         objs.append(Method(tempName, tempArgs, innerMethod))
     return objs
@@ -103,8 +107,8 @@ analysis = analyze(source)
 p(analysis)
 print(makeMethods(analysis))
 # print(pullTypes(analysis))
-user = Method("idk", "wtf", "test")
-print(user.toString())
+# user = Method("idk", "wtf", "test")
+# print(user.toString())
 # # print(user.return3())
 # # print(user.getDocs(user.setDocs("test")))
 # user.setDocs('test')
