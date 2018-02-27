@@ -38,10 +38,14 @@ Updated my slides
 #11/30/17
 Code to tokenize, pull out imports, analyze 'name' lines in code
 
-#1/16/17
+#1/16/18
 Fixed code to pull in right arguements for methods
 
-#1/23/17
+#1/23/18
+Fixed code and researched online into Java documentation
+
+#2/27/18
+Fixed organization the code into methods, and organized the lines inside of methods. Also verbalized the documentation for importing packages into misc_documentation, which is overall code documentation and not tied to a specific method. Moreover, made my foo2 sample code more complicated for testing purposes.
 
 #To do
-Conduct analysis by looking at relationships
+Conduct analysis by looking at relationships (see which methods call each other)
