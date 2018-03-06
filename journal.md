@@ -47,5 +47,8 @@ Fixed code and researched online into Java documentation
 #2/27/18
 Fixed organization the code into methods, and organized the lines inside of methods. Also verbalized the documentation for importing packages into misc_documentation, which is overall code documentation and not tied to a specific method. Moreover, made my foo2 sample code more complicated for testing purposes.
 
+#3/06/18
+Wrote the thing to figure out what methods call what other methods, still a little buggy so I need to fix that (by removing things like if, for, and other things that use open parathenses.) Also added that to the documentation of each method.
+
 #To do
 Conduct analysis by looking at relationships (see which methods call each other)
