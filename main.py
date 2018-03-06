@@ -84,11 +84,11 @@ def makeMethods(analysis):
             else:
                 if("def" not in analysis[a][4]):
                     innerMethod.append(analysis[a])
-        organizedInnerMethod = organizeInnerMethod(innerMethod)
+        organizedInnerMethod = organizeInnerMethod(tempName, innerMethod)
         objs.append(Method(tempName, tempArgs, organizedInnerMethod))
     return objs
 
-def organizeInnerMethod(inner):
+def organizeInnerMethod(tempName, inner):
     list_of_insides = [] #list of lists of insides
     tempLine = inner[0][4]
     tks = []
@@ -99,7 +99,7 @@ def organizeInnerMethod(inner):
             list_of_insides.append((tempLine, tks))
             tks = []
             tempLine = next[4]
-    print(list_of_insides)
+    print(tempName, " ", list_of_insides)
     return list_of_insides
 
 def analyze(source): 
@@ -114,6 +114,14 @@ def writeImports(analysis):
     doc = doc[0:len(doc)-5]
     doc = doc + " packages."
     return doc
+
+def findMethods(inner):
+    list_methods_called = []
+    for next in inner:
+        if "(" in next[0]:
+            loc = next[1].index("(")
+            list_methods_called.append(next[1][loc-1])
+    return list_methods_called
 
 def p(arr):
 	for next in arr:
