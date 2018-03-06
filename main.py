@@ -85,7 +85,9 @@ def makeMethods(analysis):
                 if("def" not in analysis[a][4]):
                     innerMethod.append(analysis[a])
         organizedInnerMethod = organizeInnerMethod(tempName, innerMethod)
-        objs.append(Method(tempName, tempArgs, organizedInnerMethod))
+        appendMeMethod = Method(tempName, tempArgs, organizedInnerMethod)
+        appendMeMethod.setMethodsCalled(findMethods(organizedInnerMethod))
+        objs.append(appendMeMethod.toString())
     return objs
 
 def organizeInnerMethod(tempName, inner):

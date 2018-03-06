@@ -4,6 +4,7 @@ class Method:
 	name = ""
 	args = []
 	lines = []
+	methodsCalled = []
 	docs = "Documentation not available" #string; summarizes what the method does
 
 	# def __init__(self, arg): #arg should be the method contents
@@ -34,7 +35,7 @@ class Method:
 	def setName(self, newname):
 		self.name = newname
 
-	def setArgs(sef, newargs):
+	def setArgs(self, newargs):
 		self.args = newargs
 
 	def setLines(self, newlines):
@@ -43,6 +44,10 @@ class Method:
 	def setDocs(self, newdocs):
 		self.docs = newdocs
 
+	def setMethodsCalled(self, methodsCalled):
+		self.methodsCalled = methodsCalled
+
 	def toString(self):
+		print("I call these methods: ", self.methodsCalled)
 		print("My name is ", self.name, " and I take ", self.args, " and here is my code ", self.lines, " and documentation: ", self.docs)
 		
