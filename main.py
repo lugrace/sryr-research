@@ -87,7 +87,7 @@ def makeMethods(analysis):
         organizedInnerMethod = organizeInnerMethod(tempName, innerMethod)
         appendMeMethod = Method(tempName, tempArgs, organizedInnerMethod)
         appendMeMethod.setMethodsCalled(findMethods(organizedInnerMethod))
-        objs.append(appendMeMethod.toString())
+        objs.append(appendMeMethod)
     return objs
 
 def organizeInnerMethod(tempName, inner):
@@ -101,7 +101,7 @@ def organizeInnerMethod(tempName, inner):
             list_of_insides.append((tempLine, tks))
             tks = []
             tempLine = next[4]
-    print(tempName, " ", list_of_insides)
+    # print(tempName, " ", list_of_insides)
     return list_of_insides
 
 def analyze(source): 
@@ -125,6 +125,16 @@ def findMethods(inner):
             list_methods_called.append(next[1][loc-1])
     return list_methods_called
 
+def hub(source):
+    allDocs = "There is no documentation available. Please contact the administrator."
+    methods = makeMethods(source)
+    misc_documentation.append(writeImports(source))
+    if(len(methods) > 0):
+        allDocs = ""
+    for next in methods:
+        allDocs = allDocs + next.toString() + "\n"
+    return allDocs
+
 def p(arr):
 	for next in arr:
 		print(next)
@@ -132,7 +142,7 @@ def p(arr):
 misc_documentation = []
 source = open("foo2.py").read()
 analysis = analyze(source)
-p(analysis)
-misc_documentation.append(writeImports(analysis))
-print(makeMethods(analysis))
+print(hub(analysis))
+# p(analysis)
+
 

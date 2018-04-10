@@ -48,6 +48,17 @@ class Method:
 		self.methodsCalled = methodsCalled
 
 	def toString(self):
+		numMethods = len(self.methodsCalled)
+		returnMe = "I don't really do anything. I'm sorry."
+		if(numMethods > 0):
+			returnMe = "I call " + str(numMethods) + " methods. "
+			returnMe = returnMe + "They are "
+			for next in self.methodsCalled:
+				returnMe = returnMe + next + ", "
+			returnMe = returnMe[0:len(returnMe)-2]
+		return returnMe
+
+	def toStringPrint(self):
 		print("I call these methods: ", self.methodsCalled)
 		print("My name is ", self.name, " and I take ", self.args, " and here is my code ", self.lines, " and documentation: ", self.docs)
 		
