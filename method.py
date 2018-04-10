@@ -51,14 +51,24 @@ class Method:
 		numMethods = len(self.methodsCalled)
 		returnMe = "I don't really do anything. I'm sorry."
 		if(numMethods > 0):
-			returnMe = "I call " + str(numMethods) + " methods. "
-			returnMe = returnMe + "They are "
+			if(numMethods > 1):
+				returnMe = "I call " + str(numMethods) + " methods. "
+				returnMe = returnMe + "They are "
+			else:
+				returnMe = "I call " + str(numMethods) + " method. "
+				returnMe = returnMe + "It is "
+			
 			for next in self.methodsCalled:
 				returnMe = returnMe + next + ", "
-			returnMe = returnMe[0:len(returnMe)-2]
+			returnMe = returnMe[0:len(returnMe)-2] + ". "
+
+		#add getDocs (documentation to strings)
 		return returnMe
 
 	def toStringPrint(self):
 		print("I call these methods: ", self.methodsCalled)
 		print("My name is ", self.name, " and I take ", self.args, " and here is my code ", self.lines, " and documentation: ", self.docs)
+
+
+
 		

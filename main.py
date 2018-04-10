@@ -1,5 +1,7 @@
 import os, sys, re, tokenize, keyword, io
 from method import Method
+from collections import Counter
+import nltk
 
 builtins = [
     'ArithmeticError','AssertionError','AttributeError','BaseException','BufferError','BytesWarning','DeprecationWarning','EOFError','Ellipsis','EnvironmentError','Exception','False','FloatingPointError','FutureWarning','GeneratorExit','IOError','ImportError','ImportWarning','IndentationError','IndexError','KeyError','KeyboardInterrupt','LookupError','MemoryError','NameError','None','NotImplemented','NotImplementedError','OSError','OverflowError','PendingDeprecationWarning','ReferenceError','RuntimeError','RuntimeWarning',
@@ -7,6 +9,8 @@ builtins = [
     'credits','delattr','dict','dir','divmod','dreload','enumerate','eval','execfile','exit','file','filter','float','format','frozenset','getattr','globals','hasattr','hash','help','hex','id','input','int','intern','ip_set_hook','ipalias','ipmagic','ipsystem','isinstance','issubclass','iter','jobs','len','license','list','locals','long',
     'map','max','min','next','object','oct','open','ord','pow','print','property','quit','range','raw_input','reduce','reload','repr','reversed','round','set','setattr','slice','sorted','staticmethod','str','sum','super','tuple','type','unichr','unicode','vars','xrange','zip'
 ]
+
+defaults = ['if': 'I check if ', 'for': 'I loop through']
 
 reserved_words = keyword.kwlist + builtins
 
@@ -129,10 +133,15 @@ def hub(source):
     allDocs = "There is no documentation available. Please contact the administrator."
     methods = makeMethods(source)
     misc_documentation.append(writeImports(source))
-    if(len(methods) > 0):
+    if(len(methods) > 0 or len(misc_documentation) > 0):
         allDocs = ""
+    for next in misc_documentation:
+        allDocs = allDocs + next + "\n"
     for next in methods:
         allDocs = allDocs + next.toString() + "\n"
+
+
+
     return allDocs
 
 def p(arr):
@@ -143,6 +152,5 @@ misc_documentation = []
 source = open("foo2.py").read()
 analysis = analyze(source)
 print(hub(analysis))
-# p(analysis)
 
 
