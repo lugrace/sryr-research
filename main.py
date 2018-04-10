@@ -10,7 +10,7 @@ builtins = [
     'map','max','min','next','object','oct','open','ord','pow','print','property','quit','range','raw_input','reduce','reload','repr','reversed','round','set','setattr','slice','sorted','staticmethod','str','sum','super','tuple','type','unichr','unicode','vars','xrange','zip'
 ]
 
-defaults = ['if': 'I check if ', 'for': 'I loop through']
+defaults = {'if': 'I check if ', 'for': 'I loop through'}
 
 reserved_words = keyword.kwlist + builtins
 
@@ -90,6 +90,9 @@ def makeMethods(analysis):
                     innerMethod.append(analysis[a])
         organizedInnerMethod = organizeInnerMethod(tempName, innerMethod)
         appendMeMethod = Method(tempName, tempArgs, organizedInnerMethod)
+
+        appendMeMethod.setDocs(makeDocs(tempName, tempArgs, organizedInnerMethod))
+
         appendMeMethod.setMethodsCalled(findMethods(organizedInnerMethod))
         objs.append(appendMeMethod)
     return objs
@@ -140,9 +143,31 @@ def hub(source):
     for next in methods:
         allDocs = allDocs + next.toString() + "\n"
 
-
+    #make basic strings for method names so i can get verb/noun for docs
 
     return allDocs
+
+def makeDocs(tempName, tempArgs, organizedInnerMethod):
+    returnMe = ""
+    name_string = ""
+    paran = tempName.find("(")
+    s = split_uppercase(tempName[4:paran])
+    print("S ", s)
+
+    return returnMe
+
+def split_uppercase(str):
+    x = ''
+    i = 0
+    for c in str:
+        if i == 0: 
+            x += c
+        elif c.isupper() and not str[i-1].isupper():
+            x += ' %s' % c
+        else:
+            x += c
+        i += 1
+    return x.strip()
 
 def p(arr):
 	for next in arr:

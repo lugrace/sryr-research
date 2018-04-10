@@ -49,7 +49,7 @@ class Method:
 
 	def toString(self):
 		numMethods = len(self.methodsCalled)
-		returnMe = "I don't really do anything. I'm sorry."
+		returnMe = "I don't really connect to anything. I'm sorry."
 		if(numMethods > 0):
 			if(numMethods > 1):
 				returnMe = "I call " + str(numMethods) + " methods. "
