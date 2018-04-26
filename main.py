@@ -10,7 +10,8 @@ builtins = [
     'map','max','min','next','object','oct','open','ord','pow','print','property','quit','range','raw_input','reduce','reload','repr','reversed','round','set','setattr','slice','sorted','staticmethod','str','sum','super','tuple','type','unichr','unicode','vars','xrange','zip'
 ]
 
-defaults = {'if': 'I check if ', 'for': 'I loop through'}
+defaults = {'if': 'I check if ', 'for': 'I loop through', '==': 'equals'}
+bad_stuff = [":", ")", "("]
 
 reserved_words = keyword.kwlist + builtins
 
@@ -91,9 +92,11 @@ def makeMethods(analysis):
         organizedInnerMethod = organizeInnerMethod(tempName, innerMethod)
         appendMeMethod = Method(tempName, tempArgs, organizedInnerMethod)
 
-        appendMeMethod.setDocs(makeDocs(tempName, tempArgs, organizedInnerMethod))
-
         appendMeMethod.setMethodsCalled(findMethods(organizedInnerMethod))
+        appendMeMethod.setBasicMethodsCalled(findBasicMethods(organizedInnerMethod))
+
+        appendMeMethod.setDocs(makeDocs(appendMeMethod, tempName, tempArgs, organizedInnerMethod))
+
         objs.append(appendMeMethod)
     return objs
 
@@ -129,7 +132,17 @@ def findMethods(inner):
     for next in inner:
         if "(" in next[0]:
             loc = next[1].index("(")
-            list_methods_called.append(next[1][loc-1])
+            if(next[1][loc-1] not in defaults):
+                list_methods_called.append(next[1][loc-1])
+    return list_methods_called
+
+def findBasicMethods(inner):
+    list_methods_called = []
+    for next in inner:
+        if "(" in next[0]:
+            loc = next[1].index("(")
+            if(next[1][loc-1] in defaults):
+                list_methods_called.append(next[1][loc-1])
     return list_methods_called
 
 def hub(source):
@@ -145,16 +158,44 @@ def hub(source):
 
     #make basic strings for method names so i can get verb/noun for docs
 
-    return allDocs
+    # return allDocs
+    return "Documentation Completed"
 
-def makeDocs(tempName, tempArgs, organizedInnerMethod):
-    returnMe = ""
+def makeDocs(appendMeMethod, tempName, tempArgs, organizedInnerMethod):
     name_string = ""
     paran = tempName.find("(")
     s = split_uppercase(tempName[4:paran])
-    print("S ", s)
+    sentence = "My main function is to " + s 
+    if len(tempArgs) > 0 and tempArgs[0] != "":
+        sentence = sentence + " and I do this by taking in "
+        for next in tempArgs:
+            sentence = sentence + next
 
-    return returnMe
+    sentence = sentence + ". " + appendMeMethod.toString() + " "
+    print("_________ ", organizedInnerMethod)
+
+    #turn everything into text and then analyze using nltk
+    textified = textify(organizedInnerMethod)
+    sentence = sentence + textified
+    #nltk analysis on textified
+
+    print(sentence)
+
+    #use the split names to be like 'My main function is to [name] by [look at internal methods/what it calls]'
+
+    return sentence
+
+def textify(organizedInnerMethod):
+    return_me_sentence = ""
+    basicMethods = findBasicMethods(organizedInnerMethod)
+    for next in basicMethods:
+        return_me_sentence = return_me_sentence + defaults[next]
+        for next2 in organizedInnerMethod:
+            if(next2[1][1] == next):
+                for i in range(3, len(next2[1])):
+                    if(next2[1][i] not in bad_stuff):
+                        return_me_sentence = return_me_sentence + next2[1][i]
+    return return_me_sentence
 
 def split_uppercase(str):
     x = ''

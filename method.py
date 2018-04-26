@@ -5,7 +5,9 @@ class Method:
 	args = []
 	lines = []
 	methodsCalled = []
+	basicMethodsCalled = []
 	docs = "Documentation not available" #string; summarizes what the method does
+	defaults = {'if': 'I check if ', 'for': 'I loop through', '==': 'equals'}
 
 	# def __init__(self, arg): #arg should be the method contents
 	# 	super(Method, self).__init__()
@@ -46,6 +48,9 @@ class Method:
 
 	def setMethodsCalled(self, methodsCalled):
 		self.methodsCalled = methodsCalled
+
+	def setBasicMethodsCalled(self, basicMethodsCalled):
+		self.basicMethodsCalled = basicMethodsCalled
 
 	def toString(self):
 		numMethods = len(self.methodsCalled)
