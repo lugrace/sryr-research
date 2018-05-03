@@ -11,7 +11,7 @@ builtins = [
 ]
 
 defaults = {'if': 'I check if ', 'for': 'I loop through', '==': 'equals'}
-bad_stuff = [":", ")", "("]
+bad_stuff = [":", ")", "(", "\n", "\t"]
 
 reserved_words = keyword.kwlist + builtins
 
@@ -172,7 +172,9 @@ def makeDocs(appendMeMethod, tempName, tempArgs, organizedInnerMethod):
             sentence = sentence + next
 
     sentence = sentence + ". " + appendMeMethod.toString() + " "
-    print("_________ ", organizedInnerMethod)
+    print("_________ ")
+    for next in organizedInnerMethod:
+        print(next)
 
     #turn everything into text and then analyze using nltk
     textified = textify(organizedInnerMethod)
@@ -185,17 +187,41 @@ def makeDocs(appendMeMethod, tempName, tempArgs, organizedInnerMethod):
 
     return sentence
 
+def countEnters(string):
+    return string.count("\t")
+
 def textify(organizedInnerMethod):
     return_me_sentence = ""
+    enterCount = 0
+    linePos = 0
     basicMethods = findBasicMethods(organizedInnerMethod)
     for next in basicMethods:
         return_me_sentence = return_me_sentence + defaults[next]
         for next2 in organizedInnerMethod:
+            linePos = linePos + 1
             if(next2[1][1] == next):
+                enterCount = enterCount + 1
                 for i in range(3, len(next2[1])):
                     if(next2[1][i] not in bad_stuff):
-                        return_me_sentence = return_me_sentence + next2[1][i]
+                        return_me_sentence = return_me_sentence + next2[1][i] + " " + findRest(organizedInnerMethod, linePos)
+
     return return_me_sentence
+
+def findRest(organizedInnerMethod, linePos):
+    baseReturnMe = ""
+    line = organizedInnerMethod[linePos][0]
+    baseEnters = countEnters(line)-1
+    print("base ", baseEnters)
+    print("Line pos ", linePos)
+    for i in range(0, len(organizedInnerMethod)):
+        print("what ", countEnters(organizedInnerMethod[i][1]))
+        if(i>linePos and countEnters(organizedInnerMethod[i][1]) >= baseEnters):
+            tempLine = organizedInnerMethod[i][1]
+            print("TEMP", tempLine)
+            for next in tempLine:
+                if(next not in bad_stuff):
+                    baseReturnMe = baseReturnMe + next
+    return baseReturnMe
 
 def split_uppercase(str):
     x = ''
