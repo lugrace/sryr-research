@@ -59,8 +59,24 @@ def get_output_message(return_type, method_list): #returns a list of output mess
 		output_messages.append(output_message)
 	return output_messages
 
-def get_call_message(method_list, call_graph, phrase=False):
-	
+def get_call_message(method_list, phrase=False):
+	call_messages = []
+	for next in method_list:
+		quick_sum = get_quick_summary(next, True)
+		if(phrase == False):
+			call_message = "This method calls a method that " + quick_sum + "." 
+		else:	
+			call_message = "Calls a method that " + quick_sum
+		call_messages.append(call_message)
+	return call_messages
+
+def get_use_message(usage_example):
+	assignment_statement = find_assignment_statement(usage_example)
+	subject = "This method "
+	verb = " can be used "
+	prep = " as a "
+	return subject + verb + prep + assignment_statement + ". For example: " \
+			+ usage_example
 
 ######	MISC	######
 def countEnters(string):
