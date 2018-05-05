@@ -12,6 +12,7 @@ import_statements = []
 code_length = 0
 num_methods = 0
 list_of_methods = []
+simplified_method_names = []
 
 def start(filename):
 	global source
@@ -33,7 +34,7 @@ def parse_input(raw_source_input):
 	return source
 
 def basic_documentation(source):
-	global import_statements, code_length, num_methods, list_of_methods
+	global import_statements, code_length, num_methods, list_of_methods, simplified_method_names
 	for next in source:
 		if("import" in next[0]):
 			import_statements.append(next[0][7:]) #get everything but 'import'
@@ -41,6 +42,7 @@ def basic_documentation(source):
 			num_methods = num_methods + 1
 			list_of_methods.append(next[0])
 	code_length = len(source)
+	simplified_method_names = simplify_method_names(source)
 
 ######	MESSAGES	######
 def get_quick_summary(method_name, phrase=False): #pull verb/DO from method name
@@ -121,7 +123,7 @@ def parse_method_name(method_name): #def getTime():
 			direct_object = next[0]
 	return (verb, direct_object)
 
-def get_method(method_name, source):
+def get_method(method_name, source): #def method_name
 	method = []
 	pos_method_start = 0
 	for i in range (0, len(source)):
@@ -135,7 +137,7 @@ def get_method(method_name, source):
 	return method
 
 def simplify_method_names(source):
-	global list_of_methods
+	global list_of_methods, simplified_method_names
 	simplified = []
 	for next in list_of_methods:
 		pos_first_paran = next.find("(")
@@ -143,13 +145,31 @@ def simplify_method_names(source):
 		simplified.append(parsed)
 	return simplified
 
+def make_call_graph(source, simplified_method_names):
+	graph = {}
+	print("what", simplified_method_names)
+	#everything that this method calls
+	for i in range(0, len(simplified_method_names)):
+		next = simplified_method_names[i]
+		methods = []
+		this_method = get_method(list_of_methods[i], source) #coordinates
+		print("this_method ", this_method)
+		for next_line in this_method:
+			for every_method in simplified_method_names:
+				if every_method in next_line:
+					methods.append(every_method)
+					#find a way to add an example
+		graph[next] = set(methods)
+	return graph
+
 ######	RUN ######
 start("foo2.txt")
 
 ######	TEST	######
 # print(get_quick_summary("def get_the_time():"))
 # print(get_method("def return_the_variable_x(x):", source))
-print(simplify_method_names(source))
+# print(simplify_method_names(source))
+print(make_call_graph(source, simplified_method_names))
 
 
 
