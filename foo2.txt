@@ -7,7 +7,7 @@ def get_the_time():
 def return_the_number_three():
 	return 3
 
-def return_x(x):
+def return_the_variable_x(x):
 	if(x == 3):
 		return x
 	return 5

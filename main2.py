@@ -6,14 +6,17 @@ from nltk.tokenize import word_tokenize
 # nltk.download()
 
 #overall_documentation
+source = []
 messages = []
 import_statements = []
 code_length = 0
 num_methods = 0
 
 def start(filename):
+	global source
 	raw_source_input = open(filename).read().split("\n")
 	source = parse_input(raw_source_input)
+	print("Source: ", source)
 	basic_documentation(source)
 
 def parse_input(raw_source_input):
@@ -21,7 +24,7 @@ def parse_input(raw_source_input):
 	for next in raw_source_input:
 		num_enters = countEnters(next)
 		if(num_enters > 0):
-			append_me = next[num_enters*2-1:] #return the enters \t
+			append_me = next[num_enters:] #return the enters \t
 		else:
 			append_me = next
 		if(len(append_me) > 0): #get rid of blank enters
@@ -49,6 +52,8 @@ def get_quick_summary(method_name, phrase=False): #pull verb/DO from method name
 
 def get_return_message(return_type):
 	connecter = "a " #or an
+	real_return_type = ""
+	#I actually dont really know how to do this BRB; rn = arg in return statement
 	return "It returns " + connecter + return_type 
 
 def get_output_message(return_type, method_list): #returns a list of output messages
@@ -107,7 +112,6 @@ def parse_method_name(method_name): #def getTime():
 		remake_phrase = remake_phrase + next + " "
 	text = word_tokenize(remake_phrase) #call NLTK on remake_phrase to tag
 	tagged = nltk.pos_tag(text)
-	print(tagged)
 	for next in tagged:
 		if(next[1] == "VB"):
 			verb = next[0]
@@ -115,11 +119,25 @@ def parse_method_name(method_name): #def getTime():
 			direct_object = next[0]
 	return (verb, direct_object)
 
+def get_method(method_name, source):
+	method = []
+	pos_method_start = 0
+	for i in range (0, len(source)):
+		if(source[i][0] == method_name):
+			pos_method_start = i
+	method.append(source[pos_method_start]) #get method name
+	pos_method_start = pos_method_start + 1
+	while(source[pos_method_start][1] != 0):
+		method.append(source[pos_method_start])
+		pos_method_start = pos_method_start + 1
+	return method
+
 ######	RUN ######
 start("foo2.txt")
 
 ######	TEST	######
-print(parse_method_name("def get_the_time():"))
+# print(get_quick_summary("def get_the_time():"))
+print(get_method("def get_the_time():", source))
 
 
 
