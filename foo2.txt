@@ -1,13 +1,13 @@
 import math
 import time
 
-def getTime():
+def get_the_time():
 	return time.time()
 
-def returnThree():
+def return_the_number_three():
 	return 3
 
-def returnX(x):
+def return_x(x):
 	if(x == 3):
 		return x
 	return 5

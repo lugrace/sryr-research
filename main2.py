@@ -2,6 +2,8 @@ import os, sys, re, tokenize, keyword, io
 from method import Method
 from collections import Counter
 import nltk
+from nltk.tokenize import word_tokenize
+# nltk.download()
 
 #overall_documentation
 messages = []
@@ -37,8 +39,9 @@ def basic_documentation(source):
 
 ######	MESSAGES	######
 def get_quick_summary(method_name, phrase=False): #pull verb/DO from method name
-	verb = ""
-	direct_object = ""
+	result = parse_method_name(method_name)
+	verb = result[0]
+	direct_object = result[1]
 	if(phrase == False):
 		return "This method " + verb + " " + direct_object + ". "
 	else:
@@ -75,11 +78,48 @@ def get_use_message(usage_example):
 	subject = "This method "
 	verb = " can be used "
 	prep = " as a "
-	return subject + verb + prep + assignment_statement + ". For example: " \
+	return subject + verb + prep + assignment_statement + " statement" + ". For example: " \
 			+ usage_example
 
 ######	MISC	######
 def countEnters(string):
     return string.count("\t")
 
+def find_assignment_statement(example):
+	statement = ""
+	if("if" in example):
+		statement = "conditional"
+	elif("for" in example or "while" in example):
+		statement = "iteration"
+	elif("=" in example):
+		statement = "assignment"
+	else:
+		statement = "procedural"
+	return statement
+
+def parse_method_name(method_name): #def getTime():
+	pos_first_paran = method_name.find("(")
+	parsed = method_name[4:pos_first_paran].split("_")
+	remake_phrase = ""
+	verb = ""
+	direct_object = ""
+	for next in parsed:
+		remake_phrase = remake_phrase + next + " "
+	text = word_tokenize(remake_phrase) #call NLTK on remake_phrase to tag
+	tagged = nltk.pos_tag(text)
+	print(tagged)
+	for next in tagged:
+		if(next[1] == "VB"):
+			verb = next[0]
+		elif(next[1] == "NN"):
+			direct_object = next[0]
+	return (verb, direct_object)
+
+######	RUN ######
 start("foo2.txt")
+
+######	TEST	######
+print(parse_method_name("def get_the_time():"))
+
+
+
