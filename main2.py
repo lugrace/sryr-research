@@ -2,6 +2,7 @@ import os, sys, re, tokenize, keyword, io
 from method import Method
 from collections import Counter
 import nltk
+import numpy as np
 from nltk.tokenize import word_tokenize
 # nltk.download()
 
@@ -166,6 +167,18 @@ def build_index(links): #adjacency matrix
 	method_list = links.keys()
 	return {method: index for index, method in enumerate(method_list)}
 
+def build_transition_matrix(links, index):
+	total_methods = 0
+	A = np.zeros((len(index), len(index)))
+	for method in links:
+		if(not links[method]):
+			A[index[method]] = np.ones(len(index)) / len(index)
+		else:
+			for dest_method in links[method]:
+				total_methods = total_methods + 1
+				A[index[method]][index[dest_method]] = 1.0 / len(links[method])
+	return A
+
 ######	RUN ######
 start("foo2.txt")
 
@@ -173,7 +186,9 @@ start("foo2.txt")
 # print(get_quick_summary("def get_the_time():"))
 # print(get_method("def return_the_variable_x(x):", source))
 # print(simplify_method_names(source))
-print(build_index(make_call_graph(source, simplified_method_names)))
+links = make_call_graph(source, simplified_method_names) #call_graph
+index = build_index(links) #index
+print(build_transition_matrix(links, index))
 
 
 
