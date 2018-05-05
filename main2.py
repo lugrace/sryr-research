@@ -19,6 +19,7 @@ def start(filename):
 	raw_source_input = open(filename).read().split("\n")
 	source = parse_input(raw_source_input)
 	print("Source: ", source)
+	print()
 	basic_documentation(source)
 
 def parse_input(raw_source_input):
@@ -147,7 +148,6 @@ def simplify_method_names(source):
 
 def make_call_graph(source, simplified_method_names):
 	graph = {}
-	print("what", simplified_method_names)
 	#everything that this method calls
 	for i in range(0, len(simplified_method_names)):
 		next = simplified_method_names[i]
@@ -162,6 +162,10 @@ def make_call_graph(source, simplified_method_names):
 		graph[next] = set(methods)
 	return graph
 
+def build_index(links): #adjacency matrix
+	method_list = links.keys()
+	return {method: index for index, method in enumerate(method_list)}
+
 ######	RUN ######
 start("foo2.txt")
 
@@ -169,7 +173,7 @@ start("foo2.txt")
 # print(get_quick_summary("def get_the_time():"))
 # print(get_method("def return_the_variable_x(x):", source))
 # print(simplify_method_names(source))
-print(make_call_graph(source, simplified_method_names))
+print(build_index(make_call_graph(source, simplified_method_names)))
 
 
 
