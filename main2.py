@@ -11,6 +11,7 @@ messages = []
 import_statements = []
 code_length = 0
 num_methods = 0
+list_of_methods = []
 
 def start(filename):
 	global source
@@ -32,12 +33,13 @@ def parse_input(raw_source_input):
 	return source
 
 def basic_documentation(source):
-	global import_statements, code_length, num_methods
+	global import_statements, code_length, num_methods, list_of_methods
 	for next in source:
 		if("import" in next[0]):
 			import_statements.append(next[0][7:]) #get everything but 'import'
 		if("def" in next[0]):
 			num_methods = num_methods + 1
+			list_of_methods.append(next[0])
 	code_length = len(source)
 
 ######	MESSAGES	######
@@ -132,12 +134,22 @@ def get_method(method_name, source):
 		pos_method_start = pos_method_start + 1
 	return method
 
+def simplify_method_names(source):
+	global list_of_methods
+	simplified = []
+	for next in list_of_methods:
+		pos_first_paran = next.find("(")
+		parsed = next[4:pos_first_paran]
+		simplified.append(parsed)
+	return simplified
+
 ######	RUN ######
 start("foo2.txt")
 
 ######	TEST	######
 # print(get_quick_summary("def get_the_time():"))
-print(get_method("def return_the_variable_x(x):", source))
+# print(get_method("def return_the_variable_x(x):", source))
+print(simplify_method_names(source))
 
 
 
