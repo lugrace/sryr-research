@@ -179,6 +179,15 @@ def build_transition_matrix(links, index):
 				A[index[method]][index[dest_method]] = 1.0 / len(links[method])
 	return A
 
+def pagerank(A, eps=0.0001, d=0.85):
+	P = np.ones(len(A)) / len(A)
+	while True:
+		new_P = np.ones(len(A)) * (1-d) / len(A) + d * A.T.dot(P)
+		delta = abs((new_P-P).sum())
+		if(delta <= eps):
+			return new_P
+		P = new_P
+
 ######	RUN ######
 start("foo2.txt")
 
@@ -188,7 +197,8 @@ start("foo2.txt")
 # print(simplify_method_names(source))
 links = make_call_graph(source, simplified_method_names) #call_graph
 index = build_index(links) #index
-print(build_transition_matrix(links, index))
+A = build_transition_matrix(links, index) #how important every method is probably
+print(pagerank(A))
 
 
 
