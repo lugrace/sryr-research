@@ -2,10 +2,13 @@ import math
 import time
 
 def get_the_time():
+	x = return_the_number_three()
 	return time.time()
 
 def return_the_number_three():
-	return 3
+	if(get_the_time() > 0):
+		return 3
+	return None
 
 def return_the_variable_x(x):
 	if(x == 3):

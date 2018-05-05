@@ -153,10 +153,10 @@ def make_call_graph(source, simplified_method_names):
 		next = simplified_method_names[i]
 		methods = []
 		this_method = get_method(list_of_methods[i], source) #coordinates
-		print("this_method ", this_method)
 		for next_line in this_method:
+			next_line = next_line[0]
 			for every_method in simplified_method_names:
-				if every_method in next_line:
+				if(next != every_method and every_method in next_line):
 					methods.append(every_method)
 					#find a way to add an example
 		graph[next] = set(methods)
