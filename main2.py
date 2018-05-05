@@ -58,6 +58,9 @@ def basic_documentation(source):
 
 ######	MESSAGES	######
 def get_all_messages(method_name, source): #def method_name
+
+	#use pagerank if method_list > 2 to pick best 2 (highest pagerank(A) value)
+
 	global call_graph, index, A
 	return_type = get_return_type(method_name, source)
 	method_list_simplified = call_graph[trim_method_name(method_name)] #no def
@@ -260,6 +263,9 @@ start("foo2.txt")
 # print(simplify_method_names(source))
 
 # print(pagerank(A))
-print(get_all_messages("def return_the_number_three():", source))
+# print(get_all_messages("def return_the_number_three():", source))
 # print(list_of_methods)
+
+for next in list_of_methods:
+	print(get_all_messages(next, source))
 
