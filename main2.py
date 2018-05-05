@@ -14,6 +14,9 @@ code_length = 0
 num_methods = 0
 list_of_methods = []
 simplified_method_names = []
+call_graph = {}
+index = []
+A = []
 
 def start(filename):
 	global source
@@ -22,6 +25,7 @@ def start(filename):
 	print("Source: ", source)
 	print()
 	basic_documentation(source)
+
 
 def parse_input(raw_source_input):
 	source = []
@@ -37,6 +41,7 @@ def parse_input(raw_source_input):
 
 def basic_documentation(source):
 	global import_statements, code_length, num_methods, list_of_methods, simplified_method_names
+	global call_graph, index, A
 	for next in source:
 		if("import" in next[0]):
 			import_statements.append(next[0][7:]) #get everything but 'import'
@@ -46,7 +51,47 @@ def basic_documentation(source):
 	code_length = len(source)
 	simplified_method_names = simplify_method_names(source)
 
+	links = make_call_graph(source, simplified_method_names) #call_graph
+	call_graph = links
+	index = build_index(links) #index
+	A = build_transition_matrix(links, index) #how important every method is probably
+
 ######	MESSAGES	######
+def get_all_messages(method_name, source): #def method_name
+	global call_graph, index, A
+	return_type = get_return_type(method_name, source)
+	method_list_simplified = call_graph[trim_method_name(method_name)] #no def
+	#change method_list to have defs:
+	method_list = [] #methods that CALL this method
+	for the_method_name in call_graph:
+		the_list_calls = call_graph[the_method_name]
+		if(trim_method_name(method_name) in the_list_calls):
+			#inflate the method name
+			for next in list_of_methods:
+				if(the_method_name in next):
+					method_list.append(next)
+
+	message = get_quick_summary(method_name) + get_return_message(return_type)
+	for next in get_output_message(return_type, method_list):
+		message = message + next
+
+	method_list = [] #methods THIS method calls
+	for i in range(0, len(method_list_simplified)):
+		for next in list_of_methods:
+			if(list(method_list_simplified)[i] in next):
+				method_list.append(next)
+	for next in get_call_message(method_list):
+		message = message + next
+
+	usage_example = "" #something calling this method
+	for next in source:
+		line = next[0]
+		if(trim_method_name(method_name) in line and 'def' not in line):
+			usage_example = line
+	message = message + get_use_message(usage_example)
+
+	return message
+
 def get_quick_summary(method_name, phrase=False): #pull verb/DO from method name
 	result = parse_method_name(method_name)
 	verb = result[0]
@@ -58,9 +103,8 @@ def get_quick_summary(method_name, phrase=False): #pull verb/DO from method name
 
 def get_return_message(return_type):
 	connecter = "a " #or an
-	real_return_type = ""
 	#I actually dont really know how to do this BRB; rn = arg in return statement
-	return "It returns " + connecter + return_type 
+	return "It returns " + connecter + return_type + ". "
 
 def get_output_message(return_type, method_list): #returns a list of output messages
 	#so if we have two, we can do aggregation
@@ -68,8 +112,8 @@ def get_output_message(return_type, method_list): #returns a list of output mess
 	output_messages = []
 	for next in method_list:
 		quick_sum = get_quick_summary(next, True)
-		output_message = "The " + return_type + " returned by this method " + verb \
-							+ "used to " + quick_sum + "."
+		output_message = "The " + return_type + " returned by this method" + verb \
+							+ "used to " + quick_sum + ". "
 		output_messages.append(output_message)
 	return output_messages
 
@@ -78,7 +122,7 @@ def get_call_message(method_list, phrase=False):
 	for next in method_list:
 		quick_sum = get_quick_summary(next, True)
 		if(phrase == False):
-			call_message = "This method calls a method that " + quick_sum + "." 
+			call_message = "This method calls a method that " + quick_sum + ". " 
 		else:	
 			call_message = "Calls a method that " + quick_sum
 		call_messages.append(call_message)
@@ -87,8 +131,8 @@ def get_call_message(method_list, phrase=False):
 def get_use_message(usage_example):
 	assignment_statement = find_assignment_statement(usage_example)
 	subject = "This method "
-	verb = " can be used "
-	prep = " as a "
+	verb = "can be used "
+	prep = "as a "
 	return subject + verb + prep + assignment_statement + " statement" + ". For example: " \
 			+ usage_example
 
@@ -147,6 +191,11 @@ def simplify_method_names(source):
 		simplified.append(parsed)
 	return simplified
 
+def trim_method_name(method_name): #def method_name
+	pos_first_paran = method_name.find("(")
+	parsed = method_name[4:pos_first_paran]
+	return parsed
+
 def make_call_graph(source, simplified_method_names):
 	graph = {}
 	#everything that this method calls
@@ -188,6 +237,20 @@ def pagerank(A, eps=0.0001, d=0.85):
 			return new_P
 		P = new_P
 
+def get_return_type(method_name, source):
+	method = get_method(method_name, source)
+	return_type = ""
+	for next in method:
+		if('return' in next[0]):
+			returns = next[0][6:]
+			if(returns.isdigit()):
+				return_type = 'integer'
+			elif('"' in returns):
+				return_type = 'string'
+			else:
+				return_type = 'thing' #could be object, could be anything if var
+	return return_type
+
 ######	RUN ######
 start("foo2.txt")
 
@@ -195,10 +258,8 @@ start("foo2.txt")
 # print(get_quick_summary("def get_the_time():"))
 # print(get_method("def return_the_variable_x(x):", source))
 # print(simplify_method_names(source))
-links = make_call_graph(source, simplified_method_names) #call_graph
-index = build_index(links) #index
-A = build_transition_matrix(links, index) #how important every method is probably
-print(pagerank(A))
 
-
+# print(pagerank(A))
+print(get_all_messages("def return_the_number_three():", source))
+# print(list_of_methods)
 
