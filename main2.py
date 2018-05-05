@@ -127,7 +127,7 @@ def get_method(method_name, source):
 			pos_method_start = i
 	method.append(source[pos_method_start]) #get method name
 	pos_method_start = pos_method_start + 1
-	while(source[pos_method_start][1] != 0):
+	while(pos_method_start < len(source) and source[pos_method_start][1] != 0):
 		method.append(source[pos_method_start])
 		pos_method_start = pos_method_start + 1
 	return method
@@ -137,7 +137,7 @@ start("foo2.txt")
 
 ######	TEST	######
 # print(get_quick_summary("def get_the_time():"))
-print(get_method("def get_the_time():", source))
+print(get_method("def return_the_variable_x(x):", source))
 
 
 
