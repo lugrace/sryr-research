@@ -251,11 +251,11 @@ def get_return_type(method_name, source):
 			elif('"' in returns):
 				return_type = 'string'
 			else:
-				return_type = 'thing' #could be object, could be anything if var
+				return_type = 'object' #could be object, could be anything if var
 	return return_type
 
 ######	RUN ######
-start("foo2.txt")
+# start("foo2.txt")
 
 ######	TEST	######
 # print(get_quick_summary("def get_the_time():"))
@@ -266,6 +266,14 @@ start("foo2.txt")
 # print(get_all_messages("def return_the_number_three():", source))
 # print(list_of_methods)
 
-for next in list_of_methods:
-	print(get_all_messages(next, source))
+# print(call_graph)
+# for next in list_of_methods:
+# 	print(get_all_messages(next, source))
+# 	print()
+
+if __name__ == "__main__":
+	start(sys.argv[1])
+	for next in list_of_methods:
+		print(get_all_messages(next, source))
+		print()
 
